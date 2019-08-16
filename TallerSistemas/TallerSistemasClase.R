@@ -49,3 +49,42 @@ itersolve(A,b,tol=1e-4,method="Jacobi")
 print("Convergencia Jacobi")
 print(MatTJ)
 print(normaJ)
+
+#------------------------------------------------------------------------------------------
+#Falta evaluar la convergencia por dos metodos
+A = matrix(c(8, 9, 2,
+             2, 7, 2,
+             2, 8, 6), nrow=3, byrow=TRUE)
+A
+
+b = matrix(c(69,47,68), nrow=3, byrow=TRUE)
+
+itersolve(A, b, tol = 1e-9, method = "Jacobi")
+
+itersolve(A, b, tol = 1e-9, method = "Gauss-Seidel")
+
+itersolve(A, b, tol = 1e-9, method = "Richardson")
+
+#Ahora se hayan los valores propios de la mat de transicion
+
+#T = -D(^-1)*(L + U)
+
+
+diago <- function(M) {
+  
+  M[col(M)!=row(M)] <- 0
+  
+  return(M)
+}
+
+D=diago(A)
+L = tril(A,k=-1,diag = FALSE)
+U = triu(A,k=1,diag = FALSE)
+#T es la matriz de transicion
+T = (-solve(D))%*%(L+U)
+T
+
+eigen(T)
+#La norma en infinito da el radio espectral
+norm(T,"I")
+#Como el radio espectral dio >1, no se puede asegurar la convergencia por el metodo de Jacobi
